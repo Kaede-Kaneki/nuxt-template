@@ -1,6 +1,12 @@
 export default {
     srcDir: 'src', //定义router路径
 
+    // 定义启动端口
+    server:{
+        port:'4000',
+        host:'localhost'
+    },
+
     // Global page headers: https://go.nuxtjs.dev/config-head
     head: {
         title: 'nuxt-template',
@@ -23,7 +29,9 @@ export default {
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
-        '@/plugins/element-ui'
+        '@/plugins/element-ui',
+        '@/plugins/axios',
+        '@/plugins/api'
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -44,7 +52,29 @@ export default {
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {
         // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-        baseURL: '/'
+        // baseURL: '/',
+        proxy: true,
+    },
+
+    proxy:{
+        '/local':{
+            target: 'http://localhost:3000', //后台接口域名
+            ws:false,       //如果要代理 websockets，配置这个参数
+            secure: false,  // 如果是https接口，需要配置这个参数
+            changeOrigin:true, //是否跨域
+            pathRewrite:{
+                '^/local':'' //路径重写
+            }
+        },
+        '/poems':{
+            target: 'https://v2.jinrishici.com',//后台接口域名
+            ws:false,       //如果要代理 websockets，配置这个参数
+            secure: true,  // 如果是https接口，需要配置这个参数
+            changeOrigin:true, //是否跨域
+            pathRewrite:{
+                '^/poems':'' //路径重写
+            }
+        },
     },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build

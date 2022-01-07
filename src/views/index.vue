@@ -14,12 +14,12 @@ export default {
         return {}
     },
     created () {
-        console.log()
     },
-    methods: {},
+    methods: {
+    },
     components:{
         Tutorial
-    }
+    },
 }
 </script>
 
