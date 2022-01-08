@@ -1,10 +1,21 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
 
-Vue.use(Router)
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+    if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+    return originalPush.call(this, location).catch(err => err)
+}
+const originalReplace = VueRouter.prototype.replace
+VueRouter.prototype.replace = function replace(location, onResolve, onReject) {
+    if (onResolve || onReject) return originalReplace.call(this, location, onResolve, onReject)
+    return originalReplace.call(this, location).catch(err => err)
+}
+
+Vue.use(VueRouter)
 
 export function createRouter () {
-    return new Router({
+    return new VueRouter({
         mode: 'hash',
         routes: [
             {
@@ -20,7 +31,7 @@ export function createRouter () {
                 path:'/user',
                 name:'user',
                 component:()=>import('../src/views/user/index').then((m) => m.default || m)
-            }
+            },
         ]
     })
 }
